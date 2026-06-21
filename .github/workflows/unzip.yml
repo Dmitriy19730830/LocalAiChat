@@ -1,0 +1,29 @@
+name: Unzip and Commit
+
+on:
+  push:
+    paths:
+      - 'LocalAIChat.zip'
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Unzip LocalAIChat.zip
+        run: |
+          unzip -o LocalAIChat.zip -d .
+
+      - name: Remove zip file
+        run: rm LocalAIChat.zip
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Unzipped project files" || echo "No changes"
+          git push
