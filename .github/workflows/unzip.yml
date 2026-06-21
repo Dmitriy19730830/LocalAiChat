@@ -10,23 +10,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: List files
-        run: ls -la
-
-      - name: Unzip LocalAIChat.zip
+      - name: Unzip
         run: |
-          if [ -f "LocalAIChat.zip" ]; then
-            unzip -o LocalAIChat.zip -d .
-            rm LocalAIChat.zip
-          else
-            echo "No zip file found"
-            exit 1
-          fi
+          unzip -o LocalAIChat.zip -d .
+          rm LocalAIChat.zip
+          ls -la
 
-      - name: Commit changes
-        run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Extracted project from zip" || echo "No changes"
-          git push
+      - name: Upload extracted files
+        uses: actions/upload-artifact@v4
+        with:
+          name: extracted-files
+          path: .
